@@ -7,16 +7,12 @@ window.addEventListener('load', e => {
 
   let sampleQuality = 2048
 
-  const audioContext = new AudioContext()
-  const src = audioContext.createMediaElementSource(audio)
-  const analyser = audioContext.createAnalyser()
 
   const canvas = document.getElementById('canvas')
   const context = canvas.getContext('2d')
 
   canvas.width = window.innerWidth
   canvas.height = window.innerHeight
-  analyser.fftSize = sampleQuality
 
   sampleList.addEventListener('change', e => {
     const value = sampleList.options[sampleList.selectedIndex].value
@@ -75,6 +71,11 @@ window.addEventListener('load', e => {
 
 
   function initialiseVisualiser() {
+
+    const audioContext = new AudioContext()
+    const src = audioContext.createMediaElementSource(audio)
+    const analyser = audioContext.createAnalyser()
+    analyser.fftSize = 2048
 
     src.connect(analyser)
     analyser.connect(audioContext.destination)
