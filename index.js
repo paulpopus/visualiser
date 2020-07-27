@@ -4,16 +4,6 @@ window.addEventListener('load', e => {
   const initButton = document.getElementById('initialise')
 
   const value = sampleList.options[sampleList.selectedIndex].value
-  if (value == 'trap') {
-    audio.src = 'music/two_face.mp3'
-    audio.play()
-  } else if (value == 'reggae') {
-    audio.src = 'music/thug_dub.mp3'
-    audio.play()
-  } else {
-    audio.src = 'music/blue_whale.mp3'
-    audio.play()
-  }
 
   let sampleQuality = 2048
 
@@ -140,6 +130,19 @@ window.addEventListener('load', e => {
   }
 
   initButton.addEventListener('click', e => {
+    initButton.disabled = true
     initialiseVisualiser()
+
+    const value = sampleList.options[sampleList.selectedIndex].value
+    if (value == 'trap') {
+      audio.src = 'music/two_face.mp3'
+      audio.play()
+    } else if (value == 'reggae') {
+      audio.src = 'music/thug_dub.mp3'
+      audio.play()
+    } else {
+      audio.src = 'music/blue_whale.mp3'
+      audio.play()
+    }
   })
 })
