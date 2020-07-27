@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>Visualiser</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="./index.js"></script>
+  </head>
+  <body>
+    <div id="content">
+      <div class="interface">
+        <div class="top-interface">
+          <select name="cars" id="sample">
+            <option value="" selected disabled hidden>Choose a sample</option>
+            <option value="trap">Trap</option>
+            <option value="reggae">Reggae</option>
+            <option value="rock">Alternative Rock</option>
+          </select>
+          <!-- <select name="cars" id="quality">
+            <option value="high" selected>High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
+          </select> -->
+        </div>
+
+        <div class="bottom-interface">
+          <audio id="audio" controls></audio>
+        </div>
+      </div>
+      <canvas id="canvas"></canvas>
+    </div>
+  </body>
+</html>
