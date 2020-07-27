@@ -1,6 +1,7 @@
 window.addEventListener('load', e => {
   const audio = document.getElementById('audio');
   const sampleList = document.getElementById('sample')
+  const initButton = document.getElementById('initialise')
 
   const value = sampleList.options[sampleList.selectedIndex].value
   if (value == 'trap') {
@@ -83,8 +84,6 @@ window.addEventListener('load', e => {
   context.fillRect(0, 0, canvasWidth, canvasHeight)
 
 
-  initialiseVisualiser()
-
   function initialiseVisualiser() {
 
     src.connect(analyser)
@@ -139,4 +138,8 @@ window.addEventListener('load', e => {
       cancelAnimationFrame(renderFrame)
     })
   }
+
+  initButton.addEventListener('click', e => {
+    initialiseVisualiser()
+  })
 })
