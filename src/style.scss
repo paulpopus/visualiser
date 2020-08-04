@@ -1,0 +1,61 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+
+body {
+  background: black;
+}
+
+.interface {
+  .top-interface {
+    transform: translateY(-100%);
+    transition: 0.2s;
+
+    &.shown {
+      transform: translateY(0%);
+      transition: 0.2s;
+    }
+  }
+
+  .bottom-interface {
+    transform: translateY(100%);
+    transition: 0.2s;
+
+    &.shown {
+      transform: translateY(0%);
+      transition: 0.2s;
+    }
+  }
+}
+
+.splash-screen {
+  background: linear-gradient(to bottom, #db2146, #34eda3, #34eda3, #db2146);
+  transition: 0.2s;
+
+  &.fading {
+    button {
+      transform: scale(0.5, 0.5);
+    }
+    opacity: 0;
+    transition: 0.2s;
+  }
+
+  &.disabled {
+    display: none;
+  }
+}
+
+audio {
+  width: calc(100% - 20px);
+}
+
+#canvas, #auxillary-canvas, #background-canvas {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+

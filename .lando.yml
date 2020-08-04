@@ -1,0 +1,18 @@
+name: visualiser
+services:
+  appserver:
+    type: nginx:1.18
+    webroot: .
+    ssl: false
+  node:
+    type: node:12
+    ports:
+      - '45972:45972'
+tooling:
+  yarn:
+    service: node
+  npm:
+    service: node
+  node:
+    service: node
+

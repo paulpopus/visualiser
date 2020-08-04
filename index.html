@@ -2,36 +2,48 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <title>Visualiser</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="./index.js"></script>
-
-<!--     <link rel="preload" href="music/two_face.mp3" as="audio">
-    <link rel="preload" href="music/thug_dub.mp3" as="audio">
-    <link rel="preload" href="music/blue_whale.mp3" as="audio"> -->
+    <link rel="stylesheet" href="./dist/main.css">
+    <script src="./dist/main.js"></script>
   </head>
   <body>
-    <div id="content">
-      <div class="interface">
+    <div class="splash-screen z-50 fixed h-full w-full top-0 left-0 flex justify-center items-center">
+      <button id="initialise" class="text-hyper-green rounded-lg bg-red p-16 text-20 hover:scale-105 transform font-bold duration-200 transition-all">Initialise</button>
+    </div>
+    <div class="main-content hidden">
+      <div class="interface fixed top-0 left-0 w-full h-full flex flex-col justify-between z-30">
         <div class="top-interface">
-          <select name="cars" id="sample">
-            <!-- <option value="" selected disabled hidden>Choose a sample</option> -->
+          <select name="Sample" id="sample">
             <option value="trap" selected>Trap</option>
             <option value="reggae">Reggae</option>
             <option value="rock">Alternative Rock</option>
           </select>
-          <button id="initialise">Initialise</button>
-          <!-- <select name="cars" id="quality">
-            <option value="high" selected>High</option>
-            <option value="medium">Medium</option>
+
+          <select name="Quality" id="quality">
+            <option value="extreme">Extreme</option>
+            <option value="high">High</option>
+            <option value="medium" selected>Medium</option>
             <option value="low">Low</option>
-          </select> -->
+          </select>
+
+          <select name="Style" id="style">
+            <option value="hyperBars" selected>Hyper bars</option>
+            <option value="redOnRedBars">Red on red</option>
+            <option value="hyperLine">Hyper bars line</option>
+            <option value="windowsXPBars">Windows XP bars</option>
+            <option value="windowsXPLine">Windows XP line</option>
+          </select>
+
+          <label for="background">Enable background</label>
+          <input id="background" type="checkbox" value="background" checked>
         </div>
 
         <div class="bottom-interface">
           <audio id="audio" controls></audio>
         </div>
       </div>
+      <canvas id="background-canvas"></canvas>
       <canvas id="canvas"></canvas>
+      <canvas id="auxillary-canvas"></canvas>
     </div>
   </body>
 </html>
