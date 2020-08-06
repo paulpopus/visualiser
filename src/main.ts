@@ -82,6 +82,7 @@ window.addEventListener('load', e => {
       this.audioAnalyser = this.audioContext.createAnalyser()
 
       this.audioAnalyser.fftSize = this.sampleQuality
+      this.audioAnalyser.maxDecibels = 0;
 
       this.updateBufferLength()
       this.updateDataArray()
@@ -115,12 +116,17 @@ window.addEventListener('load', e => {
       visualiserRender.updateBarWidth()
     },
 
-    updateFrequencyData() {
+    updateByteFrequencyData() {
       this.audioAnalyser.getByteFrequencyData(this.dataArray)
+    },
+
+    updateByteTimeDomainData() {
+      this.audioAnalyser.getByteTimeDomainData(this.dataArray);
     }
   }
 
   const visualiserRender = {
+    mode: 'frequency',
     barWidth: 0 as number,
     barGap: 5 as number,
     canvasHeight: 0 as number,
@@ -140,6 +146,18 @@ window.addEventListener('load', e => {
 
     updateBarGap(value: number) {
       this.barGap = value
+    },
+
+    getMode() {
+      return this.mode
+    },
+
+    changeModeToFrequency() {
+      this.mode = 'frequency'
+    },
+
+    changeModeToTimeDomain() {
+      this.mode = 'time-domain'
     },
   }
 
@@ -203,10 +221,6 @@ window.addEventListener('load', e => {
         /* return theme === name ? index : null */
       }
     },
-    findThemeNameByIndex() {
-      const array = this.returnThemesAsArray
-
-    },
     themes: {
       hyperBars: {
         getColor(color: string) {
@@ -218,10 +232,12 @@ window.addEventListener('load', e => {
         },
 
         backgroundGradient() {
+          /* Initialise the gradient */
           const background = this.getOffscreenContext().createLinearGradient(0, 0, 0, canvasControls.canvasHeight)
+
+          /* Add color stops */
           background.addColorStop(0, this.getColor('red'))
-          background.addColorStop(0.2, this.getColor('green'))
-          background.addColorStop(0.8, this.getColor('green'))
+          background.addColorStop(0.5, this.getColor('green'))
           background.addColorStop(1, this.getColor('red'))
 
           return background
@@ -311,7 +327,7 @@ window.addEventListener('load', e => {
           visualiserThemes.drawOnBackgroundContext(this.backgroundGradient())
         },
       },
-      hyperLine: {
+      whiteOnBlackBars: {
         getColor(color: string) {
           return visualiserThemes.colors[color]
         },
@@ -321,17 +337,11 @@ window.addEventListener('load', e => {
         },
 
         backgroundGradient() {
-          const background = this.getOffscreenContext().createLinearGradient(0, 0, 0, canvasControls.canvasHeight)
-
-          background.addColorStop(0, this.getColor('red'))
-          background.addColorStop(0.2, this.getColor('green'))
-          background.addColorStop(1, this.getColor('green'))
-
-          return background
+          return this.getColor('black')
         },
 
         drawBars(middleHeight: number, barHeight: number, barWidth: number, xPosition: number) {
-          context.fillStyle = `rgb(255, 0, ${255 - barHeight})`
+          context.fillStyle = 'white'
           context.fillRect(xPosition, (canvasControls.canvasHeight - barWidth / 2) - barHeight, barWidth, barWidth / 2)
         },
 
@@ -349,6 +359,37 @@ window.addEventListener('load', e => {
         },
       },
       windowsXPBars: {
+        getColor(color: string) {
+          return visualiserThemes.colors[color]
+        },
+
+        getOffscreenContext() {
+          return visualiserThemes.offscreenContext
+        },
+
+        background() {
+          return this.getColor('black')
+        },
+
+        drawBars(barHeight: number, barWidth: number, xPosition: number) {
+          context.fillStyle = this.getColor('XPgreen')
+          context.fillRect(xPosition, canvasControls.canvasHeight - barHeight, barWidth, barHeight)
+        },
+
+        // Call this command to draw the bars for this theme
+        draw(middleHeight: number, barHeight: number, xPosition: number) {
+          let barWidth = visualiserRender.barWidth
+
+          this.drawBars(barHeight, barWidth, xPosition)
+        },
+
+        // Initialise the background
+        updateBackground() {
+          visualiserRender.barGap = 1
+          visualiserThemes.drawOnBackgroundContext(this.background())
+        },
+      },
+      windowsXPLine: {
         getColor(color: string) {
           return visualiserThemes.colors[color]
         },
@@ -423,7 +464,6 @@ window.addEventListener('load', e => {
     },
 
     writeCookie() {
-      /* console.log(Object.keys(visualiserThemes.themes)) */
       const cookieContent = [
         Object.keys(visualiserThemes.themes)
       ]
@@ -509,13 +549,10 @@ window.addEventListener('load', e => {
 
       if (value == 'hyperBars') {
         visualiserThemes.updateSelectedTheme(visualiserThemes.themes.hyperBars)
-        cookieControls.writeCookie()
       } else if (value == 'redOnRedBars') {
         visualiserThemes.updateSelectedTheme(visualiserThemes.themes.redOnRedBars)
-        cookieControls.writeCookie()
-      } else if (value == 'hyperLine') {
-        visualiserThemes.updateSelectedTheme(visualiserThemes.themes.hyperLine)
-        cookieControls.writeCookie()
+      } else if (value == 'whiteOnBlackBars') {
+        visualiserThemes.updateSelectedTheme(visualiserThemes.themes.whiteOnBlackBars)
       } else if (value == 'windowsXPBars') {
         visualiserThemes.updateSelectedTheme(visualiserThemes.themes.windowsXPBars)
       }
@@ -530,15 +567,13 @@ window.addEventListener('load', e => {
       // Reset x
       x = 0
 
-      audioAnalysisControls.updateFrequencyData()
+      audioAnalysisControls.updateByteFrequencyData()
 
       if (canvasControls.hasBackground) {
         backgroundContext.drawImage(visualiserThemes.offscreenCanvas, 0, 0)
       } else {
         canvasControls.drawBlackBackground(backgroundContext)
       }
-
-
 
       for (var i = 0; i < audioAnalysisControls.bufferLength; i++) {
         barHeight = audioAnalysisControls.dataArray[i]
@@ -551,38 +586,6 @@ window.addEventListener('load', e => {
     }
 
     renderFrame()
-
-/*     function draw() {
-      requestAnimationFrame(draw);
-      audioAnalysisControls.audioAnalyser.getByteTimeDomainData(audioAnalysisControls.dataArray);
-
-      context.fillStyle = 'black';
-      context.fillRect(0, 0, 1920, 1080);
-
-      context.lineWidth = 2;
-      context.strokeStyle = 'green';
-
-      const sliceWidth = 1920 * 1.0 / audioAnalysisControls.bufferLength;
-      let x = 0;
-
-      context.beginPath();
-      for(var i = 0; i < audioAnalysisControls.bufferLength; i++) {
-        const v = audioAnalysisControls.dataArray[i]/128.0;
-        const y = v * 200;
-
-        if(i === 0)
-          context.moveTo(x, y);
-        else
-          context.lineTo(x, y);
-
-        x += sliceWidth;
-      }
-
-      context.lineTo(1920, 1080/2);
-      context.stroke();
-    };
-
-    draw(); */
 
     audio.addEventListener('ended', e => {
       console.log('The audio has ended')
@@ -603,23 +606,6 @@ window.addEventListener('load', e => {
     topInterface.classList.add('shown')
     bottomInterface.classList.add('shown')
 
-    cookieControls.checkForCookie()
-
     initialiseVisualiser()
-
-    /* Run cookies  */
-    cookieControls.writeCookie()
-
-/*     const value = sampleList.options[sampleList.selectedIndex].value
-    if (value == 'trap') {
-      audio.src = 'music/two_face.mp3'
-      audio.play()
-    } else if (value == 'reggae') {
-      audio.src = 'music/thug_dub.mp3'
-      audio.play()
-    } else {
-      audio.src = 'music/blue_whale.mp3'
-      audio.play()
-    } */
   })
 })

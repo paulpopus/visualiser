@@ -46,10 +46,6 @@ body {
   }
 }
 
-audio {
-  width: calc(100% - 20px);
-}
-
 #canvas, #auxillary-canvas, #background-canvas {
   position: fixed;
   left: 0;

@@ -1,7 +1,9 @@
 <!DOCTYPE html>
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Visualiser</title>
+    <meta name="description" content="A visualiser written in Typescript that showcases how easy it is to make visualisations using the Web Audio APIs.">
     <link rel="stylesheet" href="./dist/main.css">
     <script src="./dist/main.js"></script>
   </head>
@@ -11,34 +13,37 @@
     </div>
     <div class="main-content hidden">
       <div class="interface fixed top-0 left-0 w-full h-full flex flex-col justify-between z-30">
-        <div class="top-interface">
-          <select name="Sample" id="sample">
-            <option value="trap" selected>Trap</option>
+        <div class="top-interface p-16 text-white bg-black-light flex items-center flex-wrap md:flex-no-wrap">
+          <select name="Sample" class="mr-32 mb-32 md:mb-0 bg-white text-black px-8" id="sample">
+            <option value="none" hidden>Choose a sample</option>
+            <option value="trap">Trap</option>
             <option value="reggae">Reggae</option>
             <option value="rock">Alternative Rock</option>
           </select>
 
-          <select name="Quality" id="quality">
+          <select name="Quality" class="mr-32 mb-32 md:mb-0 bg-white text-black px-8" id="quality">
             <option value="extreme">Extreme</option>
             <option value="high">High</option>
             <option value="medium" selected>Medium</option>
             <option value="low">Low</option>
           </select>
 
-          <select name="Style" id="style">
+          <select name="Style" class="mr-32 mb-32 md:mb-0 bg-white text-black px-8" id="style">
             <option value="hyperBars" selected>Hyper bars</option>
             <option value="redOnRedBars">Red on red</option>
-            <option value="hyperLine">Hyper bars line</option>
             <option value="windowsXPBars">Windows XP bars</option>
-            <option value="windowsXPLine">Windows XP line</option>
           </select>
 
-          <label for="background">Enable background</label>
-          <input id="background" type="checkbox" value="background" checked>
+          <div class="mr-32 mb-32 md:mb-0 flex items-center">
+            <label class="mr-12" for="background">Background</label>
+            <input id="background" type="checkbox" value="background" checked>
+          </div>
+
+          <audio id="audio" class="w-full" controls></audio>
         </div>
 
         <div class="bottom-interface">
-          <audio id="audio" controls></audio>
+
         </div>
       </div>
       <canvas id="background-canvas"></canvas>
