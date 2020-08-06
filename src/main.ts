@@ -125,6 +125,7 @@ window.addEventListener('load', e => {
     }
   }
 
+  /* Manage the canvas render settings */
   const visualiserRender = {
     mode: 'frequency',
     barWidth: 0 as number,
@@ -161,6 +162,7 @@ window.addEventListener('load', e => {
     },
   }
 
+  /* List of declared visualiser themes */
   const visualiserThemes = {
     colors: {
       ['red' as string]: '#db2146' as string,
@@ -423,6 +425,7 @@ window.addEventListener('load', e => {
     }
   }
 
+  /* Cookie controls */
   const cookieControls = {
     has_cookie: false,
     cookie_name: 'visualiser-options',
